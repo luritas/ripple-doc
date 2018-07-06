@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+
+    <title>Cancel a Check - XRP Ledger Dev Portal</title>
+
+    <!--[if lt IE 9]>
+      <script src="/dist/js/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="/dist/js/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+    <!-- favicon -->
+    <link rel="icon" href="https://developers.ripple.com/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://developers.ripple.com/favicon.ico" type="image/x-icon">
+
+    <!-- jQuery -->
+    <script src="assets/vendor/jquery-1.11.1.min.js"></script>
+
+    <!-- Custom Stylesheets. ripple.css includes bootstrap, font stuff -->
+    <!-- <link href="assets/css/ripple.css" rel="stylesheet" /> -->
+    <link href="assets/vendor/bootstrap.css" rel="stylesheet" />
+    <link href="assets/css/devportal.css" rel="stylesheet" />
+
+    <!-- Bootstrap JS -->
+    <script src="assets/vendor/bootstrap.min.js"></script>
+
+    <!-- fontawesome icons -->
+    <link rel="stylesheet" href="assets/vendor/fontawesome/css/font-awesome.min.css" />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-45576805-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-45576805-2');
+    </script>
+
+
+
+    <!-- syntax highlighting -->
+    <link rel="stylesheet" href="assets/vendor/docco.min.css" />
+    <script src="assets/vendor/highlight.min.js"></script>
+
+    <!-- expandable code samples -->
+    <script src="assets/js/expandcode.js"></script>
+    <!-- multi-code selection tabs -->
+    <script src="assets/js/multicodetab.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".multicode").minitabs();
+            hljs.initHighlighting();
+            make_code_expandable();
+        });
+    </script>
+
+
+
+</head>
+
+<body class="xrp-ledger-dev-portal sidebar-primary ">
+
+  <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-white">
+    <a href="index.html" class="navbar-brand"><img src="assets/img/XRPLedger_DevPortal_Gray.svg" class="logo" width="120" height="35" alt="XRP Ledger Dev Portal" /></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHolder" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarHolder">
+      <ul class="nav navbar-nav mr-auto">
+            <li class="nav-item active-parent">
+              <a class="nav-link" href="docs.html">Docs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="use-cases.html">Use Cases</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="dev-tools-dev-tools.html">Dev Tools</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="news.html">News</a>
+            </li>
+      </ul><!-- /.navbar-nav -->
+      <form class="navbar-form navbar-right" id="navbar-search" role="search" method="get" action="https://www.google.com/search">
+        <div class="form-inline">
+          <label class="sr-only" for="topsearchbar">Search this site</label>
+          <input id="topsearchbar" name="q" type="text" class="form-control" class="top-search" placeholder="Search this site...">
+          <input name="q" value="site:developers.ripple.com" type="hidden">
+          <button type="submit" class="btn btn-default fa fa-search">&nbsp;</button>
+        </div>
+      </form>
+<div class="github-edit-wrap">
+  <a href="https://github.com/ripple/ripple-dev-portal/edit/master/content/tutorials/use-complex-payment-types/use-checks/cancel-a-check.md" target="_blank" class="github-edit">Edit on GitHub</a>
+</div><!-- /.github-edit -->    </div>
+  </nav>
+
+  <div class="container-fluid" role="document" id="main_content_wrapper">
+    <div class="row">
+      <!-- Right sidebar first so it's at the beginning for mobile layouts -->
+      <aside class="right-sidebar col-lg-3 order-lg-4 p-0" role="complementary">
+  <div class="card" id="page-toc-wrapper">
+    <p class="in-this-doc card-header">In this document:</p>
+    <ul class="dev_nav_sidebar card-body" id="dactyl_toc_sidebar">
+      <li class="level-1"><a href="cancel-a-check.html#cancel-a-check">Cancel a Check</a></li>
+<li class="level-2"><a href="cancel-a-check.html#prerequisites">Prerequisites</a></li>
+<li class="level-2"><a href="cancel-a-check.html#1-prepare-the-checkcancel-transaction">1. Prepare the CheckCancel transaction</a></li>
+<li class="level-3"><a href="cancel-a-check.html#example-checkcancel-preparation">Example CheckCancel Preparation</a></li>
+<li class="level-2"><a href="cancel-a-check.html#2-sign-the-checkcancel-transaction">2. Sign the CheckCancel transaction</a></li>
+<li class="level-3"><a href="cancel-a-check.html#example-request">Example Request</a></li>
+<li class="level-3"><a href="cancel-a-check.html#example-response">Example Response</a></li>
+<li class="level-2"><a href="cancel-a-check.html#3-submit-the-signed-checkcancel-transaction">3. Submit the signed CheckCancel transaction</a></li>
+<li class="level-3"><a href="cancel-a-check.html#example-request-1">Example Request</a></li>
+<li class="level-3"><a href="cancel-a-check.html#example-response-1">Example Response</a></li>
+<li class="level-2"><a href="cancel-a-check.html#4-wait-for-validation">4. Wait for validation</a></li>
+<li class="level-2"><a href="cancel-a-check.html#5-confirm-final-result">5. Confirm final result</a></li>
+<li class="level-3"><a href="cancel-a-check.html#example-request-2">Example Request</a></li>
+<li class="level-3"><a href="cancel-a-check.html#example-response-2">Example Response</a></li>
+
+    </ul>
+  </div>
+      </aside>
+
+      <!-- main column -->
+      <main class="main col-md-7 col-lg-6 order-md-3 p-0 " role="main" id="main_content_body">
+<nav class="breadcrumbs-wrap p-3" aria-label="breacrumb">
+  <ul class="breadcrumb bg-white">
+    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+    <li class="active breadcrumb-item"><a href="docs.html">Docs</a></li>
+    <li class="active breadcrumb-item"><a href="tutorials.html">Tutorials</a></li>
+    <li class="active breadcrumb-item"><a href="use-complex-payment-types.html">Use Complex Payment Types</a></li>
+    <li class="active breadcrumb-item"><a href="use-checks.html">Use Checks</a></li>
+    <li class="active breadcrumb-item">Cancel a Check</li>
+  </ul>
+</nav><!--/.breadcrumbs-wrap-->  <article class="p-3">
+    <div class="content">
+        <h1 id="cancel-a-check">Cancel a Check</h1>
+<p><em>Requires the <a href="known-amendments.html#checks">Checks Amendment</a>.</em></p>
+<p>This tutorial shows how to cancel a <a href="checks.html">Check</a>, which removes the <a href="check.html">Check object from the ledger</a> without sending money.</p>
+<p>You may want to cancel an incoming Check if you do not want it. You might cancel an outgoing Check if you made a mistake when sending it or if circumstances have changed. If a Check expires, it's also necessary to cancel it to remove it from the ledger so the sender gets their <a href="reserves.html#owner-reserves">owner reserve</a> back.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>To cancel a Check with this tutorial, you need the following:</p>
+<ul>
+<li>You need the ID of a Check object currently in the ledger.<ul>
+<li>For example, this tutorial includes examples that cancel a Check with the ID <code>49647F0D748DC3FE26BDACBC57F251AADEFFF391403EC9BF87C97F67E9977FB0</code>, although you must use a different ID to go through these steps yourself.</li>
+</ul>
+</li>
+<li>The <strong>address</strong> and <strong>secret key</strong> of a funded account to send the CheckCancel transaction. This address must be either the sender or the recipient of the Check, unless the Check is expired.</li>
+<li>A secure way to sign transactions, such as <a href="rippleapi-reference.html">RippleAPI</a> or your own <a href="install-rippled.html"><code>rippled</code> server</a>.</li>
+<li>A client library that can connect to a <code>rippled</code> server, such as <a href="rippleapi-reference.html">RippleAPI</a> or any HTTP or WebSocket library.<ul>
+<li>For more information, see <a href="get-started-with-the-rippled-api.html">Get Started with the <code>rippled</code> API</a>.</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-prepare-the-checkcancel-transaction">1. Prepare the CheckCancel transaction</h2>
+<p>Figure out the values of the <a href="checkcancel.html">CheckCancel transaction</a> fields. The following fields are the bare minimum; everything else is either optional or can be <a href="transaction-common-fields.html#auto-fillable-fields">auto-filled</a> when signing:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Value</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>TransactionType</code></td>
+<td align="left">String</td>
+<td align="left">Use the string <code>CheckCancel</code> when canceling a Check.</td>
+</tr>
+<tr>
+<td align="left"><code>Account</code></td>
+<td align="left">String (Address)</td>
+<td align="left">The address of the sender who is canceling the Check. (In other words, your address.)</td>
+</tr>
+<tr>
+<td align="left"><code>CheckID</code></td>
+<td align="left">String</td>
+<td align="left">The ID of the Check object in the ledger to cancel. You can get this information by looking up the metadata of the CheckCreate transaction using the <a href="tx.html">tx method</a> or by looking for Checks using the <a href="account_objects.html">account_objects method</a>.</td>
+</tr>
+</tbody>
+</table>
+<p>If you are using <a href="rippleapi-reference.html">RippleAPI</a>, you can use the <code>prepareCheckCancel()</code> helper method.</p>
+<p class="devportal-callout note"><strong>Note:</strong> RippleAPI supports Checks in versions 0.19.0 and up.</p>
+<h3 id="example-checkcancel-preparation">Example CheckCancel Preparation</h3>
+<p>The following examples demonstrate how to cancel a Check.</p>
+<div class="multicode" id="code-0"><ul class="codetabs"><li><a href="cancel-a-check.html#code-0-0">JSON-RPC, WebSocket, or Commandline</a></li><li><a href="cancel-a-check.html#code-0-1">RippleAPI</a></li></ul>
+
+<div class="code_sample" id="code-0-0" style="position: static;"><pre><code>{
+  "TransactionType": "CheckCancel",
+  "Account": "rUn84CUYbNjRoTQ6mSW7BVJPSVJNLb1QLo",
+  "CheckID": "49647F0D748DC3FE26BDACBC57F251AADEFFF391403EC9BF87C97F67E9977FB0",
+  "Fee": "12"
+}
+</code></pre></div>
+
+<div class="code_sample" id="code-0-1" style="position: static;"><pre><code class="js">'use strict'
+const RippleAPI = require('ripple-lib').RippleAPI
+
+// This example connects to a public Test Net server
+const api = new RippleAPI({server: 'wss://s.altnet.rippletest.net:51233'})
+api.connect().then(() =&gt; {
+  console.log('Connected')
+
+  const sender = 'rBXsgNkPcDN2runsvWmwxk3Lh97zdgo9za'
+  const options = {
+    // Allow up to 60 ledger versions (~5 min) instead of the default 3 versions
+    // before this transaction fails permanently.
+    "maxLedgerVersionOffset": 60
+  }
+  return api.prepareCheckCancel(sender, {
+    "checkID": "2E0AD0740B79BE0AAE5EDD1D5FC79E3C5C221D23C6A7F771D85569B5B91195C2"
+  }, options)
+
+}).then(prepared =&gt; {
+  console.log("txJSON:", prepared.txJSON);
+
+// Disconnect and return
+}).then(() =&gt; {
+  api.disconnect().then(() =&gt; {
+    console.log('Disconnected')
+    process.exit()
+  })
+}).catch(console.error)
+
+
+// Example output:
+//
+// Connected
+// txJSON: {"Account":"rBXsgNkPcDN2runsvWmwxk3Lh97zdgo9za",
+//   "TransactionType":"CheckCancel",
+//   "CheckID":"2E0AD0740B79BE0AAE5EDD1D5FC79E3C5C221D23C6A7F771D85569B5B91195C2",
+//   "Flags":2147483648,
+//   "LastLedgerSequence":8004884,
+//   "Fee":"12",
+//   "Sequence":7}
+// Disconnected
+</code></pre></div>
+</div>
+<h2 id="2-sign-the-checkcancel-transaction">2. Sign the CheckCancel transaction</h2>
+<p>The most secure way to sign a transaction is to do it locally with a signing library, such as <a href="rippleapi-reference.html">RippleAPI</a>. Alternatively, you can sign the transaction using the <a href="sign.html">sign method</a> command, but this must be done through a trusted and encrypted connection, or through a local connection, and only to a server you control.</p>
+<p>In all cases, note the signed transaction's identifying hash for later. <!--#{ fix md highlighting_ #}--></p>
+<h3 id="example-request">Example Request</h3>
+<div class="multicode" id="code-1"><ul class="codetabs"><li><a href="cancel-a-check.html#code-1-0">RippleAPI</a></li><li><a href="cancel-a-check.html#code-1-1">Commandline</a></li></ul>
+
+<div class="code_sample" id="code-1-0" style="position: static;"><pre><code class="js">'use strict'
+const RippleAPI = require('ripple-lib').RippleAPI
+
+// Can sign offline if the txJSON has all required fields
+const api = new RippleAPI()
+
+const txJSON = '{"Account":"rBXsgNkPcDN2runsvWmwxk3Lh97zdgo9za","TransactionType":"CheckCancel","CheckID":"2E0AD0740B79BE0AAE5EDD1D5FC79E3C5C221D23C6A7F771D85569B5B91195C2","Flags":2147483648,"LastLedgerSequence":8004884,"Fee":"12","Sequence":7}'
+
+// Be careful where you store your real secret.
+const secret = 's████████████████████████████'
+
+const signed = api.sign(txJSON, secret)
+
+console.log("tx_blob is:", signed.signedTransaction)
+console.log("tx hash is:", signed.id)
+</code></pre></div>
+
+<div class="code_sample" id="code-1-1" style="position: static;"><pre><code class="bash">rippled sign s████████████████████████████ '{
+  "TransactionType": "CheckCancel",
+  "Account": "rUn84CUYbNjRoTQ6mSW7BVJPSVJNLb1QLo",
+  "CheckID": "49647F0D748DC3FE26BDACBC57F251AADEFFF391403EC9BF87C97F67E9977FB0",
+  "Fee": "12"
+}'
+</code></pre></div>
+</div>
+<h3 id="example-response">Example Response</h3>
+<div class="multicode" id="code-2"><ul class="codetabs"><li><a href="cancel-a-check.html#code-2-0">RippleAPI</a></li><li><a href="cancel-a-check.html#code-2-1">Commandline</a></li></ul>
+
+<div class="code_sample" id="code-2-0" style="position: static;"><pre><code>tx_blob is: 12001222800000002400000007201B007A251450182E0AD0740B79BE0AAE5EDD1D5FC79E3C5C221D23C6A7F771D85569B5B91195C268400000000000000C732103B6FCD7FAC4F665FE92415DD6E8450AD90F7D6B3D45A6CFCF2E359045FF4BB4007446304402205D77451B0D7BCDA1FE5B98763C5B3B2837453371FE93C2B86157C44B1867AE36022003800273848BC2F8E1C6EC7EE4B0CB2425A888AE80E586886C306C796B25678B8114735FF88E5269C80CD7F7AF10530DAB840BBF6FDF
+tx hash is: 54A7A917BE9AC13962251BCF1D09803C7BBE75882B8BFC987B5933A566A48215
+</code></pre></div>
+
+<div class="code_sample" id="code-2-1" style="position: static;"><pre><code class="json">Loading: "/home/mduo13/.config/ripple/rippled.cfg"
+2018-Jan-24 01:11:07 HTTPClient:NFO Connecting to 127.0.0.1:5005
+
+{
+   "result" : {
+      "status" : "success",
+      "tx_blob" : "12001222800000002400000003501849647F0D748DC3FE26BDACBC57F251AADEFFF391403EC9BF87C97F67E9977FB068400000000000000C7321022C53CD19049F32F31848DD3B3BE5CEF6A2DD1EFDA7971AB3FA49B1BAF12AEF78744630440220615F9D19FA182F08530CD978A4C216C8676D0BA9EDB53A620AC909AA0EF0FE7E02203A09CC34C3DB85CCCB3137E78081F8F2B441FB0A3B9E40901F312D3CBA0A67A181147990EC5D1D8DF69E070A968D4B186986FDF06ED0",
+      "tx_json" : {
+         "Account" : "rUn84CUYbNjRoTQ6mSW7BVJPSVJNLb1QLo",
+         "CheckID" : "49647F0D748DC3FE26BDACBC57F251AADEFFF391403EC9BF87C97F67E9977FB0",
+         "Fee" : "12",
+         "Flags" : 2147483648,
+         "Sequence" : 3,
+         "SigningPubKey" : "022C53CD19049F32F31848DD3B3BE5CEF6A2DD1EFDA7971AB3FA49B1BAF12AEF78",
+         "TransactionType" : "CheckCancel",
+         "TxnSignature" : "30440220615F9D19FA182F08530CD978A4C216C8676D0BA9EDB53A620AC909AA0EF0FE7E02203A09CC34C3DB85CCCB3137E78081F8F2B441FB0A3B9E40901F312D3CBA0A67A1",
+         "hash" : "414558223CA8595916BB1FEF238B3BB601B7C0E52659292251CE613E6B4370F9"
+      }
+   }
+}
+</code></pre></div>
+</div>
+<h2 id="3-submit-the-signed-checkcancel-transaction">3. Submit the signed CheckCancel transaction</h2>
+<p>Take the signed transaction blob from the previous step and submit it to a <code>rippled</code> server. You can do this safely even if you do not operate the <code>rippled</code> server. The response contains a provisional result, which should be <code>tesSUCCESS</code>, but this result is <a href="finality-of-results.html">usually not final</a>. A provisional response of <code>terQUEUED</code> is also OK, since <a href="transaction-cost.html#queued-transactions">queued transactions</a> are generally included in the next open ledger version (usually about 10 seconds after submission).</p>
+<p class="devportal-callout tip"><strong>Tip:</strong> If the preliminary result is <code>tefMAX_LEDGER</code>, the transaction has failed permanently because its <code>LastLedgerSequence</code> parameter is lower than the current ledger. This happens when you take longer than the expected number of ledger versions between preparing and submitting the transaction. If this occurs, <a href="cancel-a-check.html#1-prepare-the-checkcancel-transaction">start over from step 1</a> with a higher <code>LastLedgerSequence</code> value. <!--#{ fix md highlighting_ #}--></p>
+<h3 id="example-request-1">Example Request</h3>
+<div class="multicode" id="code-3"><ul class="codetabs"><li><a href="cancel-a-check.html#code-3-0">RippleAPI</a></li><li><a href="cancel-a-check.html#code-3-1">Commandline</a></li></ul>
+
+<div class="code_sample" id="code-3-0" style="position: static;"><pre><code class="js">'use strict'
+const RippleAPI = require('ripple-lib').RippleAPI
+
+// This example connects to a public Test Net server
+const api = new RippleAPI({server: 'wss://s.altnet.rippletest.net:51233'})
+api.connect().then(() =&gt; {
+  console.log('Connected')
+
+  const tx_blob = "12001222800000002400000007201B007A251450182E0AD0740B79BE0AAE5EDD1D5FC79E3C5C221D23C6A7F771D85569B5B91195C268400000000000000C732103B6FCD7FAC4F665FE92415DD6E8450AD90F7D6B3D45A6CFCF2E359045FF4BB4007446304402205D77451B0D7BCDA1FE5B98763C5B3B2837453371FE93C2B86157C44B1867AE36022003800273848BC2F8E1C6EC7EE4B0CB2425A888AE80E586886C306C796B25678B8114735FF88E5269C80CD7F7AF10530DAB840BBF6FDF"
+
+  return api.submit(tx_blob)
+}).then(response =&gt; {
+  console.log("Preliminary transaction result:", response.resultCode)
+
+// Disconnect and return
+}).then(() =&gt; {
+  api.disconnect().then(() =&gt; {
+    console.log('Disconnected')
+    process.exit()
+  })
+}).catch(console.error)
+</code></pre></div>
+
+<div class="code_sample" id="code-3-1" style="position: static;"><pre><code class="bash">rippled submit 12001222800000002400000003501849647F0D748DC3FE26BDACBC57F251AADEFFF391403EC9BF87C97F67E9977FB068400000000000000C7321022C53CD19049F32F31848DD3B3BE5CEF6A2DD1EFDA7971AB3FA49B1BAF12AEF78744630440220615F9D19FA182F08530CD978A4C216C8676D0BA9EDB53A620AC909AA0EF0FE7E02203A09CC34C3DB85CCCB3137E78081F8F2B441FB0A3B9E40901F312D3CBA0A67A181147990EC5D1D8DF69E070A968D4B186986FDF06ED0
+</code></pre></div>
+</div>
+<h3 id="example-response-1">Example Response</h3>
+<div class="multicode" id="code-4"><ul class="codetabs"><li><a href="cancel-a-check.html#code-4-0">RippleAPI</a></li><li><a href="cancel-a-check.html#code-4-1">Commandline</a></li></ul>
+
+<div class="code_sample" id="code-4-0" style="position: static;"><pre><code class="js">Connected
+Preliminary transaction result: tesSUCCESS
+Disconnected
+</code></pre></div>
+
+<div class="code_sample" id="code-4-1" style="position: static;"><pre><code class="json">Loading: "/home/mduo13/.config/ripple/rippled.cfg"
+2018-Jan-24 01:11:07 HTTPClient:NFO Connecting to 127.0.0.1:5005
+
+{
+  "result" : {
+    "engine_result" : "tesSUCCESS",
+    "engine_result_code" : 0,
+    "engine_result_message" : "The transaction was applied. Only final in a validated ledger.",
+    "status" : "success",
+    "tx_blob" : "12001222800000002400000003501849647F0D748DC3FE26BDACBC57F251AADEFFF391403EC9BF87C97F67E9977FB068400000000000000C7321022C53CD19049F32F31848DD3B3BE5CEF6A2DD1EFDA7971AB3FA49B1BAF12AEF78744630440220615F9D19FA182F08530CD978A4C216C8676D0BA9EDB53A620AC909AA0EF0FE7E02203A09CC34C3DB85CCCB3137E78081F8F2B441FB0A3B9E40901F312D3CBA0A67A181147990EC5D1D8DF69E070A968D4B186986FDF06ED0",
+    "tx_json" : {
+      "Account" : "rUn84CUYbNjRoTQ6mSW7BVJPSVJNLb1QLo",
+      "CheckID" : "49647F0D748DC3FE26BDACBC57F251AADEFFF391403EC9BF87C97F67E9977FB0",
+      "Fee" : "12",
+      "Flags" : 2147483648,
+      "Sequence" : 3,
+      "SigningPubKey" : "022C53CD19049F32F31848DD3B3BE5CEF6A2DD1EFDA7971AB3FA49B1BAF12AEF78",
+      "TransactionType" : "CheckCancel",
+      "TxnSignature" : "30440220615F9D19FA182F08530CD978A4C216C8676D0BA9EDB53A620AC909AA0EF0FE7E02203A09CC34C3DB85CCCB3137E78081F8F2B441FB0A3B9E40901F312D3CBA0A67A1",
+      "hash" : "414558223CA8595916BB1FEF238B3BB601B7C0E52659292251CE613E6B4370F9"
+    }
+  }
+}
+</code></pre></div>
+</div>
+<h2 id="4-wait-for-validation">4. Wait for validation</h2>
+<p>On the live network or the Ripple Test Net, you can wait 4-7 seconds for the ledger to close automatically.</p>
+<p>If you're running <code>rippled</code> in stand-alone mode, use the <a href="ledger_accept.html">ledger_accept method</a> to manually close the ledger. <!--#{ fix md highlighting_ #}--></p>
+<h2 id="5-confirm-final-result">5. Confirm final result</h2>
+<p>Use the <a href="tx.html">tx method</a> with the CheckCancel transaction's identifying hash to check its status. Look for a <code>"TransactionResult": "tesSUCCESS"</code> field in the transaction's metadata, indicating that the transaction succeeded, and the field <code>"validated": true</code> in the result, indicating that this result is final.</p>
+<p>Look for a <code>DeletedNode</code> object in the transaction metadata with <code>"LedgerEntryType": "Check"</code> to indicate that the transaction removed a <a href="check.html">Check ledger object</a>. The <code>LedgerIndex</code> of this object should match the ID of the Check.</p>
+<h3 id="example-request-2">Example Request</h3>
+<div class="multicode" id="code-5"><ul class="codetabs"><li><a href="cancel-a-check.html#code-5-0">RippleAPI</a></li><li><a href="cancel-a-check.html#code-5-1">Commandline</a></li></ul>
+
+<div class="code_sample" id="code-5-0" style="position: static;"><pre><code class="js">'use strict'
+const RippleAPI = require('ripple-lib').RippleAPI
+
+// This example connects to a public Test Net server
+const api = new RippleAPI({server: 'wss://s.altnet.rippletest.net:51233'})
+api.connect().then(() =&gt; {
+  console.log('Connected')
+
+  const tx_hash = "54A7A917BE9AC13962251BCF1D09803C7BBE75882B8BFC987B5933A566A48215"
+
+  return api.getTransaction(tx_hash)
+}).then(response =&gt; {
+  console.log("Final transaction result:", response)
+
+// Disconnect and return
+}).then(() =&gt; {
+  api.disconnect().then(() =&gt; {
+    console.log('Disconnected')
+    process.exit()
+  })
+}).catch(console.error)
+</code></pre></div>
+
+<div class="code_sample" id="code-5-1" style="position: static;"><pre><code class="bash">rippled tx 414558223CA8595916BB1FEF238B3BB601B7C0E52659292251CE613E6B4370F9
+</code></pre></div>
+</div>
+<h3 id="example-response-2">Example Response</h3>
+<div class="multicode" id="code-6"><ul class="codetabs"><li><a href="cancel-a-check.html#code-6-0">RippleAPI</a></li><li><a href="cancel-a-check.html#code-6-1">Commandline</a></li></ul>
+
+<div class="code_sample" id="code-6-0" style="position: static;"><pre><code class="json">Connected
+Final transaction result: { type: 'checkCancel',
+  address: 'rBXsgNkPcDN2runsvWmwxk3Lh97zdgo9za',
+  sequence: 7,
+  id: '54A7A917BE9AC13962251BCF1D09803C7BBE75882B8BFC987B5933A566A48215',
+  specification:
+   { checkID: '2E0AD0740B79BE0AAE5EDD1D5FC79E3C5C221D23C6A7F771D85569B5B91195C2' },
+  outcome:
+   { result: 'tesSUCCESS',
+     timestamp: '2018-04-02T23:42:22.000Z',
+     fee: '0.000012',
+     balanceChanges: { rBXsgNkPcDN2runsvWmwxk3Lh97zdgo9za: [Array] },
+     orderbookChanges: {},
+     ledgerVersion: 8004870,
+     indexInLedger: 3 } }
+Disconnected
+</code></pre></div>
+
+<div class="code_sample" id="code-6-1" style="position: static;"><pre><code class="json">Loading: "/home/mduo13/.config/ripple/rippled.cfg"
+2018-Jan-24 01:11:53 HTTPClient:NFO Connecting to 127.0.0.1:5005
+
+{
+   "result" : {
+      "Account" : "rUn84CUYbNjRoTQ6mSW7BVJPSVJNLb1QLo",
+      "CheckID" : "49647F0D748DC3FE26BDACBC57F251AADEFFF391403EC9BF87C97F67E9977FB0",
+      "Fee" : "12",
+      "Flags" : 2147483648,
+      "Sequence" : 3,
+      "SigningPubKey" : "022C53CD19049F32F31848DD3B3BE5CEF6A2DD1EFDA7971AB3FA49B1BAF12AEF78",
+      "TransactionType" : "CheckCancel",
+      "TxnSignature" : "30440220615F9D19FA182F08530CD978A4C216C8676D0BA9EDB53A620AC909AA0EF0FE7E02203A09CC34C3DB85CCCB3137E78081F8F2B441FB0A3B9E40901F312D3CBA0A67A1",
+      "date" : 570071520,
+      "hash" : "414558223CA8595916BB1FEF238B3BB601B7C0E52659292251CE613E6B4370F9",
+      "inLedger" : 7,
+      "ledger_index" : 7,
+      "meta" : {
+         "AffectedNodes" : [
+            {
+               "ModifiedNode" : {
+                  "FinalFields" : {
+                     "Flags" : 0,
+                     "Owner" : "rfkE1aSy9G8Upk4JssnwBxhEv5p4mn2KTy",
+                     "RootIndex" : "032D861D151E38E86F46805ED1896D1A50144F65459717B6D12470A9E6E3B66E"
+                  },
+                  "LedgerEntryType" : "DirectoryNode",
+                  "LedgerIndex" : "032D861D151E38E86F46805ED1896D1A50144F65459717B6D12470A9E6E3B66E"
+               }
+            },
+            {
+               "DeletedNode" : {
+                  "FinalFields" : {
+                     "Account" : "rUn84CUYbNjRoTQ6mSW7BVJPSVJNLb1QLo",
+                     "Destination" : "rfkE1aSy9G8Upk4JssnwBxhEv5p4mn2KTy",
+                     "DestinationNode" : "0000000000000000",
+                     "DestinationTag" : 1,
+                     "Expiration" : 570113521,
+                     "Flags" : 0,
+                     "InvoiceID" : "46060241FABCF692D4D934BA2A6C4427CD4279083E38C77CBE642243E43BE291",
+                     "OwnerNode" : "0000000000000000",
+                     "PreviousTxnID" : "5463C6E08862A1FAE5EDAC12D70ADB16546A1F674930521295BC082494B62924",
+                     "PreviousTxnLgrSeq" : 6,
+                     "SendMax" : "100000000",
+                     "Sequence" : 2
+                  },
+                  "LedgerEntryType" : "Check",
+                  "LedgerIndex" : "49647F0D748DC3FE26BDACBC57F251AADEFFF391403EC9BF87C97F67E9977FB0"
+               }
+            },
+            {
+               "ModifiedNode" : {
+                  "FinalFields" : {
+                     "Flags" : 0,
+                     "Owner" : "rUn84CUYbNjRoTQ6mSW7BVJPSVJNLb1QLo",
+                     "RootIndex" : "AD136EC2A266027D8F202C97D294BBE32F6FC2AD5501D9853F785FE77AB94C94"
+                  },
+                  "LedgerEntryType" : "DirectoryNode",
+                  "LedgerIndex" : "AD136EC2A266027D8F202C97D294BBE32F6FC2AD5501D9853F785FE77AB94C94"
+               }
+            },
+            {
+               "ModifiedNode" : {
+                  "FinalFields" : {
+                     "Account" : "rUn84CUYbNjRoTQ6mSW7BVJPSVJNLb1QLo",
+                     "Balance" : "4999999999964",
+                     "Flags" : 0,
+                     "OwnerCount" : 1,
+                     "Sequence" : 4
+                  },
+                  "LedgerEntryType" : "AccountRoot",
+                  "LedgerIndex" : "D3A1DBAA28717975A9119EC4CBC891BA9A66236C484F03C9911F463AD3B66DE0",
+                  "PreviousFields" : {
+                     "Balance" : "4999999999976",
+                     "OwnerCount" : 2,
+                     "Sequence" : 3
+                  },
+                  "PreviousTxnID" : "5463C6E08862A1FAE5EDAC12D70ADB16546A1F674930521295BC082494B62924",
+                  "PreviousTxnLgrSeq" : 6
+               }
+            }
+         ],
+         "TransactionIndex" : 0,
+         "TransactionResult" : "tesSUCCESS"
+      },
+      "status" : "success",
+      "validated" : true
+   }
+}
+</code></pre></div>
+</div>
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- rippled release notes links -->
+    </div>
+  </article>
+      </main>
+      <!-- Left sidebar last so it's at the end for mobile -->
+      <aside class="sidebar col-md-5 col-lg-3 p-0 order-md-1" role="complementary">
+<div class="tree_nav">
+
+  <!---->
+    <div class="sidenav_parent">
+      <a href="tutorials.html"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Tutorials</a>
+    </div>
+
+  <!---->
+
+    <!---->
+    <div id="sidenav" role="tablist" aria-multiselectable="true">
+        <!---->
+          <div class="card">
+            <div class="card-header" role="tab" id="sidenav_cat_head_2">
+              <h5 class="card-title">
+                <a class="collapsed sidenav_cat_toggler" role="button" data-toggle="collapse" href="cancel-a-check.html#sidenav_collapse_2" aria-expanded="true" aria-controls="sidenav_collapse_2">&nbsp;</a>
+                <a class="sidenav_cat_title" href="get-started.html">Get Started</a>
+              </h5>
+            </div><!-- /.card-header -->
+
+            <div id="sidenav_collapse_2" class="collapse" role="tabpanel" aria-labelledby="sidenav_cat_head_2">
+              <div class="card-body">
+                <ul class="sidebar_pagelist">
+                    <li><a class="nosubcat-page" href="get-started-with-the-rippled-api.html">Get Started with the rippled API</a></li>
+                    <li><a class="nosubcat-page" href="get-started-with-rippleapi-for-javascript.html">RippleAPI Beginners Guide</a></li>
+
+                </ul>
+              </div><!-- /.card-body -->
+            </div><!-- /#sidenav_collapse2 -->
+
+          </div><!-- /.card -->
+
+        <!---->
+          <div class="card">
+            <div class="card-header" role="tab" id="sidenav_cat_head_5">
+              <h5 class="card-title">
+                <a class="collapsed sidenav_cat_toggler" role="button" data-toggle="collapse" href="cancel-a-check.html#sidenav_collapse_5" aria-expanded="true" aria-controls="sidenav_collapse_5">&nbsp;</a>
+                <a class="sidenav_cat_title" href="use-simple-xrp-payments.html">Use Simple XRP Payments</a>
+              </h5>
+            </div><!-- /.card-header -->
+
+            <div id="sidenav_collapse_5" class="collapse" role="tabpanel" aria-labelledby="sidenav_cat_head_5">
+              <div class="card-body">
+                <ul class="sidebar_pagelist">
+                    <li><a class="nosubcat-page" href="reliable-transaction-submission.html">Reliable Transaction Submission</a></li>
+                    <li><a class="nosubcat-page" href="cancel-or-skip-a-transaction.html">Cancel or Skip a Transaction</a></li>
+                    <li><a class="nosubcat-page" href="look-up-transaction-results.html">Look up Transaction Results</a></li>
+
+                </ul>
+              </div><!-- /.card-body -->
+            </div><!-- /#sidenav_collapse5 -->
+
+          </div><!-- /.card -->
+
+        <!---->
+          <div class="card">
+            <div class="card-header" role="tab" id="sidenav_cat_head_9">
+              <h5 class="card-title">
+                <a class="collapsed sidenav_cat_toggler" role="button" data-toggle="collapse" href="cancel-a-check.html#sidenav_collapse_9" aria-expanded="true" aria-controls="sidenav_collapse_9">&nbsp;</a>
+                <a class="sidenav_cat_title" href="manage-account-settings.html">Manage Account Settings</a>
+              </h5>
+            </div><!-- /.card-header -->
+
+            <div id="sidenav_collapse_9" class="collapse" role="tabpanel" aria-labelledby="sidenav_cat_head_9">
+              <div class="card-body">
+                <ul class="sidebar_pagelist">
+                    <li><a class="nosubcat-page" href="assign-a-regular-key-pair.html">Assign a Regular Key Pair</a></li>
+                    <li><a class="nosubcat-page" href="change-or-remove-a-regular-key-pair.html">Change or Remove a Regular Key Pair</a></li>
+                    <li><a class="nosubcat-page" href="set-up-multi-signing.html">Set Up Multi-Signing</a></li>
+                    <li><a class="nosubcat-page" href="send-a-multi-signed-transaction.html">Send a Multi-Signed Transaction</a></li>
+
+                </ul>
+              </div><!-- /.card-body -->
+            </div><!-- /#sidenav_collapse9 -->
+
+          </div><!-- /.card -->
+
+        <!---->
+          <div class="card active">
+            <div class="card-header" role="tab" id="sidenav_cat_head_14">
+              <h5 class="card-title">
+                <a class="sidenav_cat_toggler" role="button" data-toggle="collapse" href="cancel-a-check.html#sidenav_collapse_14" aria-expanded="true" aria-controls="sidenav_collapse_14">&nbsp;</a>
+                <a class="sidenav_cat_title active-parent" href="use-complex-payment-types.html">Use Complex Payment Types</a>
+              </h5>
+            </div><!-- /.card-header -->
+
+            <div id="sidenav_collapse_14" class="collapse show" role="tabpanel" aria-labelledby="sidenav_cat_head_14">
+              <div class="card-body">
+                <ul class="sidebar_pagelist">
+                    <li><a class="subcat-title" href="use-escrows.html">Use Escrows</a></li>
+
+                        <li><a class="subpage" href="send-a-time-held-escrow.html">Send a Time-Held Escrow</a></li>
+                        <li><a class="subpage" href="send-a-conditionally-held-escrow.html">Send a Conditionally-Held Escrow</a></li>
+                        <li><a class="subpage" href="cancel-an-expired-escrow.html">Cancel an Expired Escrow</a></li>
+                        <li><a class="subpage" href="look-up-escrows.html">Look up escrows</a></li>
+
+                    <li><a class="nosubcat-page" href="use-payment-channels.html">Use Payment Channels</a></li>
+                    <li><a class="subcat-title active-parent" href="use-checks.html">Use Checks</a></li>
+
+                        <li><a class="subpage" href="send-a-check.html">Send a Check</a></li>
+                        <li><a class="subpage" href="cash-a-check-for-an-exact-amount.html">Cash a Check for an Exact Amount</a></li>
+                        <li><a class="subpage" href="cash-a-check-for-a-flexible-amount.html">Cash a Check for a Flexible Amount</a></li>
+                        <li><a class="active subpage" href="cancel-a-check.html#main_content_body">Cancel a Check</a></li>
+                        <li><a class="subpage" href="look-up-checks-by-sender.html">Look Up Checks by Sender</a></li>
+                        <li><a class="subpage" href="look-up-checks-by-recipient.html">Look Up Checks by Recipient</a></li>
+
+
+                </ul>
+              </div><!-- /.card-body -->
+            </div><!-- /#sidenav_collapse14 -->
+
+          </div><!-- /.card -->
+
+        <!---->
+          <div class="card">
+            <div class="card-header" role="tab" id="sidenav_cat_head_28">
+              <h5 class="card-title">
+                <a class="collapsed sidenav_cat_toggler" role="button" data-toggle="collapse" href="cancel-a-check.html#sidenav_collapse_28" aria-expanded="true" aria-controls="sidenav_collapse_28">&nbsp;</a>
+                <a class="sidenav_cat_title" href="xrp-ledger-businesses.html">XRP Ledger Businesses</a>
+              </h5>
+            </div><!-- /.card-header -->
+
+            <div id="sidenav_collapse_28" class="collapse" role="tabpanel" aria-labelledby="sidenav_cat_head_28">
+              <div class="card-body">
+                <ul class="sidebar_pagelist">
+                    <li><a class="nosubcat-page" href="list-xrp-as-an-exchange.html">List XRP as an Exchange</a></li>
+                    <li><a class="nosubcat-page" href="become-an-xrp-ledger-gateway.html">Become an XRP Ledger Gateway</a></li>
+
+                </ul>
+              </div><!-- /.card-body -->
+            </div><!-- /#sidenav_collapse28 -->
+
+          </div><!-- /.card -->
+
+        <!---->
+          <div class="card">
+            <div class="card-header" role="tab" id="sidenav_cat_head_31">
+              <h5 class="card-title">
+                <a class="collapsed sidenav_cat_toggler" role="button" data-toggle="collapse" href="cancel-a-check.html#sidenav_collapse_31" aria-expanded="true" aria-controls="sidenav_collapse_31">&nbsp;</a>
+                <a class="sidenav_cat_title" href="manage-the-rippled-server.html">Manage the rippled Server</a>
+              </h5>
+            </div><!-- /.card-header -->
+
+            <div id="sidenav_collapse_31" class="collapse" role="tabpanel" aria-labelledby="sidenav_cat_head_31">
+              <div class="card-body">
+                <ul class="sidebar_pagelist">
+                    <li><a class="nosubcat-page" href="capacity-planning.html">Capacity Planning</a></li>
+                    <li><a class="nosubcat-page" href="install-rippled.html">Install rippled</a></li>
+                    <li><a class="nosubcat-page" href="update-rippled.html">Update rippled</a></li>
+                    <li><a class="nosubcat-page" href="cluster-rippled-servers.html">Cluster rippled Servers</a></li>
+                    <li><a class="nosubcat-page" href="run-rippled-as-a-validator.html">Run rippled as a Validator</a></li>
+                    <li><a class="nosubcat-page" href="start-a-new-genesis-ledger-in-stand-alone-mode.html">Start a New Genesis Ledger in Stand-Alone Mode</a></li>
+                    <li><a class="nosubcat-page" href="load-a-saved-ledger-in-stand-alone-mode.html">Load a Saved Ledger in Stand-Alone Mode</a></li>
+                    <li><a class="nosubcat-page" href="advance-the-ledger-in-stand-alone-mode.html">Advance the Ledger in Stand-Alone Mode</a></li>
+                    <li><a class="nosubcat-page" href="build-run-rippled-ubuntu.html">Build and Run rippled on Ubuntu</a></li>
+
+                </ul>
+              </div><!-- /.card-body -->
+            </div><!-- /#sidenav_collapse31 -->
+
+          </div><!-- /.card -->
+
+    </div><!-- /#sidenav -->
+</div><!-- /.tree_nav -->      </aside>
+    </div><!--/.row (main layout)-->
+  </div>
+
+<footer class="ripple-footer" role="contentinfo">
+  <section class="container-fluid px-1 px-sm-5 pt-3 pb-0">
+      <div class="row">
+
+            <div class="col mx-xl-5 my-3 foot-nav-col">
+              <h5><a class="foot-nav-link" href="docs.html">Docs</a><hr /></h5>
+
+
+
+
+<div class="children-display">
+  <ul>
+            <li class="level-1"><a href="concepts.html">Concepts</a></li>
+        <li class="level-1"><a href="tutorials.html">Tutorials</a></li>
+        <li class="level-1"><a href="references.html">References</a></li>
+
+  </ul>
+</div>            </div><!--/.foot-nav-col -->
+
+
+            <div class="col mx-xl-5 my-3 foot-nav-col">
+              <h5><a class="foot-nav-link" href="use-cases.html">Use Cases</a><hr /></h5>
+
+
+
+
+<div class="children-display">
+  <ul>
+          <li class="level-1"><a href="run-a-rippled-validator.html">Run a rippled Validator</a></li>
+
+      <li class="level-1"><a href="list-xrp-in-your-exchange.html">List XRP in Your Exchange</a></li>
+
+      <li class="level-1"><a href="contribute-code-to-rippled.html">Contribute Code to rippled</a></li>
+
+
+  </ul>
+</div>            </div><!--/.foot-nav-col -->
+
+
+            <div class="col mx-xl-5 my-3 foot-nav-col">
+              <h5><a class="foot-nav-link" href="dev-tools-dev-tools.html">Dev Tools</a><hr /></h5>
+
+
+
+
+<div class="children-display">
+  <ul>
+          <li class="level-1"><a href="xrp-ledger-rpc-tool.html">RPC Tool</a></li>
+
+      <li class="level-1"><a href="websocket-api-tool.html">WebSocket API Tool</a></li>
+
+      <li class="level-1"><a href="data-api-v2-tool.html">Data API v2 Tool</a></li>
+
+      <li class="level-1"><a href="ripple-txt-validator.html">ripple.txt Validator</a></li>
+
+      <li class="level-1"><a href="xrp-test-net-faucet.html">XRP Test Net Faucet</a></li>
+
+
+  </ul>
+</div>            </div><!--/.foot-nav-col -->
+
+
+            <div class="col mx-xl-5 my-3 foot-nav-col">
+              <h5><a class="foot-nav-link" href="news.html">News</a><hr /></h5>
+
+
+
+
+<div class="children-display">
+  <ul>
+          <li class="level-1"><a href="known-amendments.html">Known Amendments</a></li>
+
+
+  </ul>
+</div>            </div><!--/.foot-nav-col -->
+
+
+            <div class="col mx-xl-5 my-3 foot-nav-col">
+              <h5><a class="foot-nav-link" href="https://ripple.com/" target="_blank">Ripple <i class="fa fa-external-link"></i></a><hr /></h5>
+              <div class="children-display">
+                <ul>
+                  <li class="level-1"><a class="foot-nav-link" href="https://ripple.com/company/careers/" target="_blank">Ripple Careers <i class="fa fa-external-link"></i></a></li>
+                  <li class="level-1"><a href="https://ripple.com/collateral/#xrp" target="_blank">XRP Resources <i class="fa fa-external-link"></i></a></li>
+                </ul>
+              </div>
+            </div><!--/.foot-nav-col -->
+      </div><!--/.row-->
+  </section>
+
+  <section class="container-fluid pb-5 px-5">
+
+    <div class="build-disclaimer">
+      <p>
+        These resources are provided for informational purposes only, as illustrative references for your independent development of products or services designed to interface with Ripple’s open-source technologies. These resources are not intended to direct or influence how you or any other person interacts with Ripple’s open-source technologies. Ripple <strong><em>does not</em></strong> endorse any specific resource and makes no representations or warranties with respect to the resources listed.
+      </p>
+      <p>
+        Note that anti-money laundering and counter-terrorism financing laws and regulations, such as the U.S. Bank Secrecy Act and regulations issued by the Financial Crimes Enforcement Network (FinCEN), require certain parties to take certain precautions against financial crime. In particular, you may be interested in the <a href="https://www.fincen.gov/resources/statutes-regulations/guidance/application-fincens-regulations-persons-administering">2013 guidance issued by FinCEN</a> in response to questions concerning the regulatory treatment of persons who use or make a business of exchanging, accepting, or transmitting certain virtual currencies. Additional FinCEN references are available at <a href="https://www.fincen.gov">https://www.fincen.gov</a>.
+      </p>
+    </div>
+
+    <div class="absolute_bottom_footer">
+      <span>&copy; 2013 - 2018 Ripple. All Rights Reserved.</span>
+      <span><a href="https://ripple.com/terms-of-use/">Terms</a></span>
+      <span><a href="https://ripple.com/privacy-policy/">Privacy</a></span>
+      <span><a href="https://raw.githubusercontent.com/ripple/ripple-dev-portal/master/LICENSE">License</a></span>
+    </div><!-- /.absolute_bottom_footer -->
+
+  </section>
+</footer>
+
+<!-- Jump to top button -->
+<a href="cancel-a-check.html#main_content_wrapper" class="jump-to-top btn btn-primary btn-lg" role="button" title="Jump to top of page">Top</span></a>
+<script type="text/javascript" src="assets/js/jump-to-top.js"></script>
+</body>
+</html>
